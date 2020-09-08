@@ -48,8 +48,10 @@ def comments(fp, c):
                 current = next
                 next = fp.read(1)
             c = fp.read(1)
+            return 1
         else:
             fp.unread(c)
+            return 0
 
 
 def newLine(fp, c, line):
@@ -63,60 +65,61 @@ def checkToken(fp, c, tokens, items):
     # IS OPERATOR TOKEN
     c = fp.read(1)
     if c == ';' or c == ',' or c == '.' or c == '{' or c == '}' \
-            or c == '(' or c == ')' or c == '[' or c == ']':
-        print(c + " - TOKEN")
+            or c == '(' or c == ')' or c == '[' or c == ']' \
+            or c == '+' or c == '*' or c == '-' or c == '/':
+        print("TOKEN - VALUE-> " + c)
         items.append(c)
         tokens.append("TOKEN")
-    elif c == '+' or c == '*' or c == '-' or c == '/':
-        print(c + " - OPERATOR")
-        items.append(c)
-        tokens.append("OPERATOR")
+        fp.unread(c)
     elif c == '=':
-        c = fp.read(1)
-        if c == '=':
+        d = fp.read(1)
+        if d == '=':
             items.append("EQ")
             tokens.append("TOKEN")
-            print("EQ - TOKEN")
+            print("TOKEN - VALUE-> " + c + d)
         else:
             items.append("=")
             tokens.append("TOKEN")
-            print("= - TOKEN")
+            print("TOKEN - VALUE-> " + c)
+        fp.unread(d)
     elif c == '<':
-        c = fp.read(1)
-        if c == '=':
+        d = fp.read(1)
+        if d == '=':
             items.append("LQ")
             tokens.append("TOKEN")
-            print("LQ  - TOKEN")
-
-        elif c == '>':
+            print("TOKEN - VALUE-> " + c + d)
+        elif d == '>':
             items.append("NEQ")
             tokens.append("TOKEN")
-            print("NEQ  - TOKEN")
+            print("TOKEN - VALUE-> " + c + d)
         else:
             items.append(c)
             tokens.append("TOKEN")
-            print("<  -  TOKEN")
+            print("TOKEN - VALUE-> " + c)
+        fp.unread(d)
     elif c == '>':
-        c = fp.read(1)
-        if c == '=':
+        d = fp.read(1)
+        if d == '=':
             items.append("GE")
             tokens.append("TOKEN")
-            print("GE  - TOKEN")
+            print("TOKEN - VALUE-> " + c + d)
         else:
             items.append(c)
             tokens.append("TOKEN")
-            print("<  - TOKEN")
+            print("TOKEN - VALUE-> " + c)
+        fp.unread(d)
         # IS ASSIGNATION TOKEN
     elif c == ':':
         d = fp.read(1)
         if d == '=':
             items.append(":=")
             tokens.append("TOKEN")
-            print(":= - TOKEN")
+            print("TOKEN - VALUE-> " + c + d)
         else:
             items.append(":")
             tokens.append("TOKEN")
-            print(": - TOKEN")
+            print("TOKEN - VALUE-> " + c)
+        fp.unread(d)
     fp.unread(c)
 
 
@@ -138,11 +141,10 @@ def scan(fp, c, line, tokens, items):
         if isReserved(buffer):
             items.append(buffer)
             tokens.append("RESERVED")
-            print(buffer + " - RESERVED")
         else:
             items.append(buffer)
             tokens.append("ID")
-            print(buffer + " - ID")
+        print("WORD - LEXEME-> " + buffer)
         fp.unread(c)
         checkToken(fp, c, tokens, items)
         newLine(fp, c, line)
@@ -169,21 +171,21 @@ def scan(fp, c, line, tokens, items):
         if c.isalpha():
             items.append(str(integer))
             tokens.append("INTEGER")
-            print(str(integer) + " - INTEGER")
+            print("INTEGER - VALUE-> " + str(integer))
             items.append(c)
             tokens.append("ID")
-            print(c + " - ID")
+            print("WORD - LEXEME-> " + c)
         else:
             buffer = "".join(buffer) + str(integer)
             # REAL
             if flag == 0:
                 items.append(buffer)
                 tokens.append("INTEGER")
-                print(buffer + " - INTEGER")
+                print("INTEGER - VALUE-> " + buffer)
             else:
                 items.append(buffer)
                 tokens.append("REAL")
-                print(buffer + " - REAL")
+                print("REAL - VALUE-> " + buffer)
         newLine(fp, c, line)
 
     # IS STRING
@@ -200,7 +202,7 @@ def scan(fp, c, line, tokens, items):
         buffer = "".join(buffer)
         items.append(buffer)
         tokens.append("CHARACTERSTRING")
-        print(buffer + "- CHARACTERSTRING")
+        print("STRING - VALUE-> " + buffer)
         newLine(fp, c, line)
 
 
@@ -227,6 +229,7 @@ def main():
         c = c.lower()
         scan(fp, c, line, tokens, items)
     fill_table("tokens.cvs", tokens, items)
+    print("EOF")
 
     """pieces = []
     with tokenize.open(sys.argv[1]) as file:

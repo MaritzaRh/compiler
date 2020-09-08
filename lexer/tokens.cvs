@@ -1,19 +1,48 @@
 RESERVED,program
-ID,example1
+ID,example3
+TOKEN,;
+RESERVED,var
+ID,name
+TOKEN,","
+ID,surname
+TOKEN,:
+RESERVED,string
 TOKEN,;
 RESERVED,begin
 RESERVED,writeln
 TOKEN,(
-CHARACTERSTRING,'Hello World. Prepare to learn PASCAL!!'
+CHARACTERSTRING,'Enter your name:'
+TOKEN,)
+TOKEN,;
+RESERVED,readln
+TOKEN,(
+ID,name
+TOKEN,)
+TOKEN,;
+RESERVED,writeln
+TOKEN,(
+CHARACTERSTRING,"""Enter your surname:"""
+TOKEN,)
+TOKEN,;
+RESERVED,readln
+TOKEN,(
+ID,surname
+TOKEN,)
+TOKEN,;
+RESERVED,writeln
+TOKEN,;
+RESERVED,writeln
+TOKEN,;
+RESERVED,writeln
+TOKEN,(
+CHARACTERSTRING,"""Your full name is: """
+ID,name
+TOKEN,","
+CHARACTERSTRING,""" """
+ID,surname
 TOKEN,)
 TOKEN,;
 RESERVED,readln
 TOKEN,;
-REAL,156.908
-INTEGER,8
-TOKEN,EQ
-INTEGER,9
-INTEGER,1
-ID,e
 RESERVED,end
 TOKEN,.
