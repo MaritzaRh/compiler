@@ -1,0 +1,3 @@
+En la línea de comandos escribe: 
+
+pip install unread-decorator
