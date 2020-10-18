@@ -1,5 +1,10 @@
+import parser
+
 from unread_decorator import add_unread
 from lexer.Lexer import *
+from grammar.Parser import *
+#from parser.Parser import *
+
 import sys
 
 class Main(Lexer):
@@ -28,5 +33,7 @@ class Main(Lexer):
             lex.scan(fp, c, tokens, items, lines)
         lex.fill_table("tokens.cvs", tokens, items, lines)
         print("EOF")
+        parse = Parser()
+
 
 Main.main(Main())
