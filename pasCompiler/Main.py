@@ -1,6 +1,6 @@
 from unread_decorator import add_unread
 from lexer.Lexer import *
-
+import sys
 
 class Main(Lexer):
     def main(self):
@@ -16,6 +16,7 @@ class Main(Lexer):
 
         items = []
         tokens = []
+        lines = []
         lex = Lexer()
         while True:
             # add decorator to unread a character
@@ -24,8 +25,8 @@ class Main(Lexer):
             if not c:
                 break
             c = c.lower()
-            lex.scan(fp, c, tokens, items)
-        lex.fill_table("tokens.cvs", tokens, items)
+            lex.scan(fp, c, tokens, items, lines)
+        lex.fill_table("tokens.cvs", tokens, items, lines)
         print("EOF")
 
 Main.main(Main())
