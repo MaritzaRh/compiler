@@ -1,12 +1,23 @@
 import sys
 import os
 import csv
-from itertools import islice
 
 class Parser():
     def __init__(self):
         input = []
         rule = 0
+
+    def isAMatch(self, headers, input):
+        # Look for match between input and headers
+        i = 1
+        flag = 0
+        for header in headers:
+            if input == header:
+                flag = 1
+                break
+            i += 1
+        i -= 1
+        return flag, i
 
     def set_lrtable(self, tokens, items, lines):
         try:
@@ -18,11 +29,14 @@ class Parser():
             #Open headers of LR table
             hd = cwd + "\\headers.txt"
             filehd = open(hd, "r")
+            gr = cwd + "\\grammar.txt"
+            filegr = open(gr, "r")
         except:
             print("Unexpected error")
             sys.exit()
 
         headers = []
+        grammar = []
         stack = [0]
         data = [row for row in reader]
         #Prepare input
@@ -33,46 +47,53 @@ class Parser():
         for word in filehd:
             word = word.rstrip("\n")
             headers.append(word)
+        #extract grammar
+        for word in filegr:
+            word = word.rstrip("\n")
+            grammar.append(word)
 
-        n = 0
+        row = -1
         #For each input
         for word in self.input:
-            if self.input[n] == "$":
+            if self.input[0] == "$":
                 break
             else:
                 #Look for match between input and headers
-                i = 1
-                flag = 0
-                for header in headers:
-                    if self.input[n] == header:
-                        flag = 1
-                        break
-                    i += 1
-                i -= 1
+                flag, i = self.isAMatch(headers, self.input[0])
                 #If input and header matched
                 if flag:
                     #Take out action> line out from lr table according to input and header: 0-n Ignore 0
-                    print(stack[-1])
-                    print(i)
                     rule = data[int(stack[-1])][i]
-                    print(rule)
                     #try:
-                    if type(rule[0]) == 'int':
-                        print("goto")
-                    else:
+                    if type(rule[0]) != 'int':
+                        row = -1
                         lenght = len(rule)
                         aux = []
+                        for x in range(1, lenght):
+                            aux.append(rule[x])
+                        aux = ''.join(map(str, aux))
                         #case shift
                         if rule[0] == 's':
                             stack.append(self.input[0])
                             self.input.remove(self.input[0])
-                            for x in range(1, lenght):
-                                aux.append(rule[x])
-                            aux = ''.join(map(str, aux))
                             stack.append(aux)
                         #case reduce
                         else:
                             print("reduce")
+                            production = grammar[int(aux)]
+                            production = production.split("->")
+                            producer = str(production[0])
+                            producer = producer.rstrip(" ")
+                            production = production[1]
+                            #Case epsilon
+                            if production == ' \'\'':
+                                stack.append(producer)
+                            #Case not epsilon
+                            #Case go to
+                            flag, i = self.isAMatch(headers, producer)
+                            row = int(stack [-2])
+                            rule = data[row][i]
+                            stack.append(rule)
                     """except:
                         #Empty cell in lr table
                         print("HEREUnexpected token in line ", lines[n])
@@ -82,4 +103,4 @@ class Parser():
                     print("Unexpected token in line ", lines[n])
                     sys.exit()
             print(stack)
-
+            print(self.input)
