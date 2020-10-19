@@ -1,6 +1,4 @@
-import sys
 import csv
-from unread_decorator import add_unread
 
 class Lexer():
     def __init__(self):
@@ -49,7 +47,7 @@ class Lexer():
         if c == ';' or c == ',' or c == '.' or c == '{' or c == '}' \
                 or c == '(' or c == ')' or c == '[' or c == ']' \
                 or c == '+' or c == '*' or c == '-' or c == '/':
-            print("TOKEN - VALUE-> " + c)
+            #print("TOKEN - VALUE-> " + c)
             items.append(c)
             tokens.append("TOKEN")
             lines.append(self.line)
@@ -59,41 +57,41 @@ class Lexer():
                 items.append("EQ")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c + d)
+                #print("TOKEN - VALUE-> " + c + d)
             else:
                 items.append("=")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c)
+                #print("TOKEN - VALUE-> " + c)
         elif c == '<':
             d = fp.read(1)
             if d == '=':
                 items.append("LQ")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c + d)
+                #print("TOKEN - VALUE-> " + c + d)
             elif d == '>':
                 items.append("NEQ")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c + d)
+                #print("TOKEN - VALUE-> " + c + d)
             else:
                 items.append(c)
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c)
+                #print("TOKEN - VALUE-> " + c)
         elif c == '>':
             d = fp.read(1)
             if d == '=':
                 items.append("GE")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c + d)
+                #print("TOKEN - VALUE-> " + c + d)
             else:
                 items.append(c)
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c)
+                #print("TOKEN - VALUE-> " + c)
         # IS ASSIGNATION TOKEN
         elif c == ':':
             d = fp.read(1)
@@ -101,12 +99,12 @@ class Lexer():
                 items.append(":=")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c + d)
+                #print("TOKEN - VALUE-> " + c + d)
             else:
                 items.append(":")
                 tokens.append("TOKEN")
                 lines.append(self.line)
-                print("TOKEN - VALUE-> " + c)
+                #print("TOKEN - VALUE-> " + c)
 
     def scan(self, fp, c, tokens, items, lines):
         buffer = []
@@ -130,9 +128,9 @@ class Lexer():
                 items.append(buffer)
                 tokens.append("RESERVED")
             else:
-                items.append(buffer)
-                tokens.append("ID")
-            print("WORD - LEXEME-> " + buffer.lower())
+                items.append("identifier")
+                tokens.append(buffer)
+            #print("WORD - LEXEME-> " + buffer.lower())
             lines.append(self.line)
             fp.unread(c)
             if c == '\n':
@@ -162,11 +160,11 @@ class Lexer():
                 items.append(str(integer))
                 tokens.append("INTEGER")
                 lines.append(self.line)
-                print("INTEGER - VALUE-> " + str(integer))
-                items.append(c)
-                tokens.append("ID")
+                #print("INTEGER - VALUE-> " + str(integer))
+                items.append("identifier")
+                tokens.append(c)
                 lines.append(self.line)
-                print("WORD - LEXEME-> " + c)
+                #print("WORD - LEXEME-> " + c)
             else:
                 buffer = "".join(buffer) + str(integer)
                 # append integer and REAL
@@ -174,12 +172,12 @@ class Lexer():
                     items.append(buffer)
                     tokens.append("INTEGER")
                     lines.append(self.line)
-                    print("INTEGER - VALUE-> " + buffer)
+                    #print("INTEGER - VALUE-> " + buffer)
                 else:
                     items.append(buffer)
                     tokens.append("REAL")
                     lines.append(self.line)
-                    print("REAL - VALUE-> " + buffer)
+                    #print("REAL - VALUE-> " + buffer)
                 #check if the element is token
                 self.checkToken(fp, c, tokens, items, lines)
         # IS STRING
@@ -196,4 +194,4 @@ class Lexer():
             items.append(buffer)
             tokens.append("CHARACTERSTRING")
             lines.append(self.line)
-            print("STRING - VALUE-> " + buffer)
+            #print("STRING - VALUE-> " + buffer)

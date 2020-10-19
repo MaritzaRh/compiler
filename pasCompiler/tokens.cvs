@@ -1,0 +1,13 @@
+RESERVED,program,1
+example1,identifier,1
+TOKEN,;,1
+RESERVED,begin,3
+RESERVED,writeln,4
+TOKEN,(,4
+CHARACTERSTRING,"""Hello World. Prepare to learn PASCAL!!""",4
+TOKEN,),4
+TOKEN,;,4
+RESERVED,readln,5
+TOKEN,;,5
+RESERVED,end,6
+TOKEN,.,6
