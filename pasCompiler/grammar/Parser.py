@@ -42,6 +42,7 @@ class Parser():
         #Prepare input
         self.input = items
         self.input.append("$")
+        print(self.input)
 
         #extract headers from lr table
         for word in filehd:
@@ -54,7 +55,7 @@ class Parser():
 
         row = -1
         #For each input
-        for word in self.input:
+        while True:
             if self.input[0] == "$":
                 break
             else:
@@ -64,6 +65,7 @@ class Parser():
                 if flag:
                     #Take out action> line out from lr table according to input and header: 0-n Ignore 0
                     rule = data[int(stack[-1])][i]
+                    print(rule)
                     #try:
                     if type(rule[0]) != 'int':
                         row = -1
@@ -72,11 +74,14 @@ class Parser():
                         for x in range(1, lenght):
                             aux.append(rule[x])
                         aux = ''.join(map(str, aux))
+                        print(aux)
                         #case shift
                         if rule[0] == 's':
                             stack.append(self.input[0])
                             self.input.remove(self.input[0])
                             stack.append(aux)
+                            print(stack)
+                            print(self.input)
                         #case reduce
                         else:
                             print("reduce")
@@ -89,6 +94,18 @@ class Parser():
                             if production == ' \'\'':
                                 stack.append(producer)
                             #Case not epsilon
+                            else:
+                                production = production.split(' ')
+                                production.remove(production[0])
+                                for element in production:
+                                    print("removing " + stack[-1])
+                                    stack.pop()
+                                    print(stack)
+                                    print("removing " + stack[-1])
+                                    stack.pop()
+                                    print(stack)
+                                stack.append(producer)
+                                print(stack)
                             #Case go to
                             flag, i = self.isAMatch(headers, producer)
                             row = int(stack [-2])
@@ -100,7 +117,12 @@ class Parser():
                         sys.exit()"""
                 #Grammar not accepted, header not found
                 else:
-                    print("Unexpected token in line ", lines[n])
+                    print("Unexpected token in line ")
                     sys.exit()
             print(stack)
             print(self.input)
+            if rule == 'acc' and self.input == '$':
+                print("Grammar accepted")
+                break
+            elif self.input == '$':
+                print("Grammar rejected")

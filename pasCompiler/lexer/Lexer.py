@@ -191,7 +191,7 @@ class Lexer():
                     break
             buffer.append(c)
             buffer = "".join(buffer)
-            items.append(buffer)
-            tokens.append("CHARACTERSTRING")
+            items.append("string")
+            tokens.append(buffer)
             lines.append(self.line)
-            #print("STRING - VALUE-> " + buffer)
+            print("STRING - VALUE-> " + buffer)

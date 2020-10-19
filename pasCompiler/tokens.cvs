@@ -4,7 +4,7 @@ TOKEN,;,1
 RESERVED,begin,3
 RESERVED,writeln,4
 TOKEN,(,4
-CHARACTERSTRING,"""Hello World. Prepare to learn PASCAL!!""",4
+"""Hello World. Prepare to learn PASCAL!!""",string,4
 TOKEN,),4
 TOKEN,;,4
 RESERVED,readln,5
