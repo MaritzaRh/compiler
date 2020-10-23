@@ -31,7 +31,7 @@ class Main(Lexer):
         lex.fill_table("tokens.cvs", tokens, items, lines)
         #print("EOF")
         parse = Parser()
-        parse.set_lrtable(tokens, items, lines)
+        parse.analyzeGrammar(tokens, items, lines)
 
 
 Main.main(Main())

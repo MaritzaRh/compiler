@@ -19,7 +19,29 @@ class Parser():
         i -= 1
         return flag, i
 
-    def set_lrtable(self, tokens, items, lines):
+    def printError(self, originalInputLen, items, tokens, stack, lines):
+        inputLen = len(self.input) + 1
+        error = originalInputLen - inputLen
+        lineError = str(lines[error + 1])
+        if items[0] == 'identifier':
+            tkerror = str(tokens[error])
+            if tkerror == 'RESERVED':
+                tkerror = str(tokens[error + 2])
+        else:
+            try:
+                tkerror = str(stack[-2])
+            except:
+                tkerror = str(tokens[error])
+                if tkerror == 'RESERVED':
+                    if error > 0:
+                        tkerror = str(self.input[error])
+                    else:
+                        tkerror = str(self.input[0])
+                        lineError = str(1)
+        print("Unexpected token \"" + tkerror + "\" in line " + lineError)
+        sys.exit()
+
+    def analyzeGrammar(self, tokens, items, lines):
         try:
             #Open LR table
             cwd = os.getcwd()
@@ -42,7 +64,6 @@ class Parser():
         #Prepare input
         self.input = items
         self.input.append("$")
-        print(self.input)
 
         #extract headers from lr table
         for word in filehd:
@@ -53,12 +74,15 @@ class Parser():
             word = word.rstrip("\n")
             grammar.append(word)
 
+        originalInputLen = len(self.input) - 1
+
         row = -1
         #For each input
         while True:
             if self.input[0] == "$":
                 break
             else:
+                print(self.input)
                 #Look for match between input and headers
                 flag, i = self.isAMatch(headers, self.input[0])
                 #If input and header matched
@@ -66,63 +90,62 @@ class Parser():
                     #Take out action> line out from lr table according to input and header: 0-n Ignore 0
                     rule = data[int(stack[-1])][i]
                     print(rule)
-                    #try:
-                    if type(rule[0]) != 'int':
-                        row = -1
-                        lenght = len(rule)
-                        aux = []
-                        for x in range(1, lenght):
-                            aux.append(rule[x])
-                        aux = ''.join(map(str, aux))
-                        print(aux)
-                        #case shift
-                        if rule[0] == 's':
-                            stack.append(self.input[0])
-                            self.input.remove(self.input[0])
-                            stack.append(aux)
-                            print(stack)
-                            print(self.input)
-                        #case reduce
-                        else:
-                            print("reduce")
-                            production = grammar[int(aux)]
-                            production = production.split("->")
-                            producer = str(production[0])
-                            producer = producer.rstrip(" ")
-                            production = production[1]
-                            #Case epsilon
-                            if production == ' \'\'':
-                                stack.append(producer)
-                            #Case not epsilon
+                    if not rule:
+                        self.printError(originalInputLen, items, tokens, stack, lines)
+                    try:
+                        if type(rule[0]) != 'int':
+                            row = -1
+                            lenght = len(rule)
+                            aux = []
+                            for x in range(1, lenght):
+                                aux.append(rule[x])
+                            aux = ''.join(map(str, aux))
+                            #case shift
+                            if rule[0] == 's':
+                                stack.append(self.input[0])
+                                self.input.remove(self.input[0])
+                                stack.append(aux)
+                            #case reduce
                             else:
-                                production = production.split(' ')
-                                production.remove(production[0])
-                                for element in production:
-                                    print("removing " + stack[-1])
-                                    stack.pop()
-                                    print(stack)
-                                    print("removing " + stack[-1])
-                                    stack.pop()
-                                    print(stack)
-                                stack.append(producer)
-                                print(stack)
-                            #Case go to
-                            flag, i = self.isAMatch(headers, producer)
-                            row = int(stack [-2])
-                            rule = data[row][i]
-                            stack.append(rule)
-                    """except:
+                                print("reduce")
+                                production = grammar[int(aux)]
+                                production = production.split("->")
+                                producer = str(production[0])
+                                producer = producer.rstrip(" ")
+                                production = production[1]
+                                #Case epsilon
+                                if production == ' \'\'':
+                                    stack.append(producer)
+                                #Case not epsilon
+                                else:
+                                    production = production.split(' ')
+                                    production.remove(production[0])
+                                    for element in production:
+                                        print("removing " + stack[-1])
+                                        stack.pop()
+                                        print(stack)
+                                        print("removing " + stack[-1])
+                                        stack.pop()
+                                        print(stack)
+                                    stack.append(producer)
+                                #Case go to
+                                flag, i = self.isAMatch(headers, producer)
+                                row = int(stack[-2])
+                                rule = data[row][i]
+                                stack.append(rule)
+                                print("goto")
+                                print(rule)
+                    except:
                         #Empty cell in lr table
-                        print("HEREUnexpected token in line ", lines[n])
-                        sys.exit()"""
+                        self.printError(originalInputLen, items, tokens, stack, lines)
                 #Grammar not accepted, header not found
                 else:
                     print("Unexpected token in line ")
                     sys.exit()
+            print("Stack->")
             print(stack)
+            print("Input->")
             print(self.input)
-            if rule == 'acc' and self.input == '$':
-                print("Grammar accepted")
-                break
-            elif self.input == '$':
-                print("Grammar rejected")
+            print("\n")
+        if rule != "acc":
+            self.printError(originalInputLen, items, tokens, stack, lines)
