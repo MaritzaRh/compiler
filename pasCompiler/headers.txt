@@ -7,7 +7,7 @@ identifier
 constants
 constant-definition
 var
-,
+:
 begin
 end
 integer

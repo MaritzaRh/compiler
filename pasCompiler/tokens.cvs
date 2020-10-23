@@ -1,15 +1,50 @@
 RESERVED,program,1
-RESERVED,begin,1
-example1,identifier,1
+example3,identifier,1
 TOKEN,;,1
-RESERVED,begin,3
-RESERVED,writeln,4
-TOKEN,(,4
-"""Hello World. Prepare to learn PASCAL!!""",string,4
-TOKEN,),4
-TOKEN,;,4
-TOKEN,;,4
-RESERVED,readln,5
+RESERVED,var,2
+name,identifier,2
+TOKEN,",",2
+surname,identifier,2
+TOKEN,:,2
+RESERVED,string,2
+TOKEN,;,2
+RESERVED,begin,4
+RESERVED,writeln,5
+TOKEN,(,5
+"""Enter your name:""",string,5
+TOKEN,),5
 TOKEN,;,5
-RESERVED,end,6
-TOKEN,.,6
+RESERVED,readln,6
+TOKEN,(,6
+name,identifier,6
+TOKEN,),6
+TOKEN,;,6
+RESERVED,writeln,7
+TOKEN,(,7
+"""Enter your surname:""",string,7
+TOKEN,),7
+TOKEN,;,7
+RESERVED,readln,8
+TOKEN,(,8
+surname,identifier,8
+TOKEN,),8
+TOKEN,;,8
+RESERVED,writeln,9
+TOKEN,;,9
+RESERVED,writeln,10
+TOKEN,;,10
+RESERVED,writeln,12
+TOKEN,(,12
+"""Your full name is: """,string,12
+TOKEN,",",12
+name,identifier,12
+TOKEN,",",12
+""" """,string,12
+TOKEN,",",12
+surname,identifier,12
+TOKEN,),12
+TOKEN,;,12
+RESERVED,readln,13
+TOKEN,;,13
+RESERVED,end,14
+TOKEN,.,14

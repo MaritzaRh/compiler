@@ -157,9 +157,9 @@ class Lexer():
                     c = fp.read(1)
             if c.isalpha():
                 #case number is 1e
-                items.append(str(integer))
-                tokens.append(self.line)
-                lines.append("INTEGER")
+                items.append("integer")
+                tokens.append(str(integer))
+                lines.append(self.line)
                 #print("INTEGER - VALUE-> " + str(integer))
                 items.append("identifier")
                 tokens.append(c)
@@ -169,14 +169,14 @@ class Lexer():
                 buffer = "".join(buffer) + str(integer)
                 # append integer and REAL
                 if isFloat == 0:
-                    items.append(buffer)
-                    tokens.append(self.line)
-                    lines.append("INTEGER")
+                    items.append("integer")
+                    tokens.append(buffer)
+                    lines.append(self.line)
                     #print("INTEGER - VALUE-> " + buffer)
                 else:
-                    items.append(buffer)
-                    tokens.append(self.line)
-                    lines.append("REAL")
+                    items.append("real")
+                    tokens.append(buffer)
+                    lines.append(self.line)
                     #print("REAL - VALUE-> " + buffer)
                 #check if the element is token
                 self.checkToken(fp, c, tokens, items, lines)
