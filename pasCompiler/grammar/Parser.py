@@ -59,6 +59,7 @@ class Parser():
         data = [row for row in reader]
         #Prepare input
         self.input = items
+        #self.input.append(".")
         self.input.append("$")
 
         #extract headers from lr table
@@ -72,10 +73,12 @@ class Parser():
 
         originalInputLen = len(self.input)
 
+        acc = True
+
         row = -1
         #For each input
         while True:
-            if self.input[0] == "$":
+            if not self.input[0] or stack[0] == 'programa':
                 break
             else:
                 #print(self.input)
@@ -90,6 +93,8 @@ class Parser():
                     if not rule:
                         acc = False
                         self.printError(acc, originalInputLen, tokens, stack, lines)
+                    elif rule == 'acc':
+                        break
                     #try:
                     if type(rule[0]) != 'int':
                         row = -1
@@ -105,7 +110,7 @@ class Parser():
                             stack.append(aux)
                         #case reduce
                         else:
-                            #print("reduce")
+                            print("reduce")
                             production = grammar[int(aux)]
                             production = production.split("->")
                             producer = str(production[0])
@@ -123,30 +128,32 @@ class Parser():
                                     stack.pop()
                                     #print(stack)
                                     #print("removing " + stack[-1])
+                                    if not stack:
+                                        break
                                     stack.pop()
                                     #print(stack)
                                 stack.append(producer)
                             #Case go to
                             flag, i = self.isAMatch(headers, producer)
-                            row = int(stack[-2])
+                            try:
+                                row = int(stack[-2])
+                            except:
+                                pass
                             rule = data[row][i]
                             stack.append(rule)
-                            #print("goto")
-                            #print(rule)
+                            print("goto")
+                            print(rule)
                     """except:
                         #Empty cell in lr table
                         self.printError(originalInputLen, items, tokens, stack, lines)"""
                 #Grammar not accepted, header not found
                 else:
-                    print("Unexpected token in line ")
-                    sys.exit()
-
+                    acc = False
+                    self.printError(acc, originalInputLen, tokens, stack, lines)
             print("Stack->")
             print(stack)
             print("Input->")
             print(self.input)
             print("\n")
             print(rule)
-        if rule != "acc":
-            acc = True
-            self.printError(acc, originalInputLen, tokens, stack, lines)
+        print("Program finished with exit code 0")
