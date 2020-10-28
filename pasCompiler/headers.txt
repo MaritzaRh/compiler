@@ -4,8 +4,8 @@ program
 identifier
 (
 )
-constants
-constant-definition
+constant
+=
 var
 :
 begin
@@ -19,7 +19,6 @@ string
 writeln
 number
 readln
-repeat-stateexpressionment
 while
 do
 repeat
@@ -33,7 +32,6 @@ else
 +
 -
 not
-=
 <>
 <
 <=
@@ -46,13 +44,14 @@ div
 mod
 and
 $
-programa'
-programa
+start'
+start
 program-heading
 opt-program-parameters
 program-parameters
 program-block
 constant-declaration-part
+constant-definition
 more-constant-definition
 variable-declaration-part
 more-variable-declaration
@@ -66,7 +65,7 @@ more-statement
 statement
 simple-statement
 assignment-statement
-IO-statement
+io-statement
 writeln-statement
 opt-element-list
 element-list

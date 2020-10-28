@@ -1,5 +1,5 @@
-programa' -> programa
-programa -> program-heading ; program-block .
+start' -> start
+start -> program-heading ; program-block .
 program-heading -> program identifier opt-program-parameters
 opt-program-parameters -> ( program-parameters )
 opt-program-parameters -> ''
@@ -7,6 +7,7 @@ program-parameters -> identifier-list
 program-block -> constant-declaration-part variable-declaration-part statement-part
 constant-declaration-part -> constant constant-definition ; more-constant-definition
 constant-declaration-part -> ''
+constant-definition -> identifier = expression
 more-constant-definition -> constant-definition ; more-constant-definition
 more-constant-definition -> ''
 variable-declaration-part -> var variable-declaration ; more-variable-declaration
@@ -14,7 +15,7 @@ variable-declaration-part -> ''
 more-variable-declaration -> variable-declaration ; more-variable-declaration
 more-variable-declaration -> ''
 variable-declaration -> identifier-list : type
-statement-part -> begin statement-sequence end .
+statement-part -> begin statement-sequence end
 type -> integer
 type -> real
 type -> boolean
@@ -22,17 +23,16 @@ type -> string
 identifier-list -> identifier more-identifier
 more-identifier -> , identifier more-identifier
 more-identifier -> ''
-statement-sequence -> statement more-statement
-more-statement -> ; statement more-statement
+statement-sequence -> statement ; more-statement
+more-statement -> statement ; more-statement
 more-statement -> ''
 statement -> simple-statement
 statement -> structured-statement
 simple-statement -> assignment-statement
-simple-statement -> IO-statement
-simple-statement -> ''
+simple-statement -> io-statement
 assignment-statement -> identifier := expression
-IO-statement -> writeln-statement
-IO-statement -> readln-statement
+io-statement -> writeln-statement
+io-statement -> readln-statement
 writeln-statement -> writeln ( opt-element-list )
 opt-element-list -> element-list
 opt-element-list -> ''
@@ -43,14 +43,14 @@ element -> number
 element -> string
 element -> identifier
 readln-statement -> readln opt-identifier-list
-opt-identifier-list -> ''
 opt-identifier-list -> ( identifier-list )
+opt-identifier-list -> ''
 structured-statement -> compound-statement
 structured-statement -> repetitive-statement
 structured-statement -> conditional-statement
-compound-statement -> begin statement-sequence end .
+compound-statement -> begin statement-sequence end
 repetitive-statement -> while-statement
-repetitive-statement -> repeat-stateexpressionment
+repetitive-statement -> repeat-statement
 repetitive-statement -> for-statement
 while-statement -> while expression do statement
 repeat-statement -> repeat statement-sequence until expression
