@@ -28,7 +28,7 @@ class Main(Lexer):
                 break
             c = c.lower()
             lex.scan(fp, c, tokens, items, lines)
-        lex.fill_table("tokens.cvs", tokens, items, lines)
+        #lex.fill_table("tokens.cvs", tokens, items, lines)
         #print("EOF")
         parse = Parser()
         parse.analyzeGrammar(tokens, items, lines)
