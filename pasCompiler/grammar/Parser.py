@@ -61,7 +61,6 @@ class Parser():
         data = [row for row in reader]
         #Prepare input
         self.input = items
-        #self.input.append(".")
         self.input.append("$")
 
         #extract headers from lr table
@@ -144,4 +143,3 @@ class Parser():
                 else:
                     acc = False
                     self.printError(acc, originalInputLen, tokens, stack, lines)
-        print("Program finished with exit code 0")

@@ -169,12 +169,12 @@ class Lexer():
                 buffer = "".join(buffer) + str(integer)
                 # append integer and REAL
                 if isFloat == 0:
-                    items.append("integer")
+                    items.append("number")
                     tokens.append(buffer)
                     lines.append(self.line)
                     #print("INTEGER - VALUE-> " + buffer)
                 else:
-                    items.append("real")
+                    items.append("number")
                     tokens.append(buffer)
                     lines.append(self.line)
                     #print("REAL - VALUE-> " + buffer)
